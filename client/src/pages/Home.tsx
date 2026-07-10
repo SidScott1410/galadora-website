@@ -226,7 +226,7 @@ const STATS = [
   { value: "10 MW",   label: "Under Development",  sub: "Node 01 — FID 2026" },
   { value: "40 MW",   label: "Under Exclusivity",  sub: "Exclusive option agreements" },
   { value: "100 MW",  label: "Under Diligence",    sub: "Active site pipeline" },
-  { value: "1 GW",    label: "Program Target",     sub: "~100 nodes, 10-year horizon" },
+  { value: "1 GW",    label: "Program Target",     sub: "10-year horizon" },
 ];
 
 function CapacityPill() {
@@ -262,7 +262,7 @@ function CapacityPill() {
         aria-label="View capacity pipeline"
       >
         <span className={styles.capacityDot} aria-hidden="true" />
-        <span>295 MW pipeline</span>
+        <span>100 MW pipeline</span>
         <span className={[styles.capacityChevron, open ? styles.capacityChevronOpen : ""].join(" ").trim()} aria-hidden="true">▴</span>
       </button>
 

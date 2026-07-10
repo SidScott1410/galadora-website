@@ -660,7 +660,7 @@ a { color: inherit; text-decoration: none; }
   position: absolute;
   bottom: calc(100% + 10px);
   left: 0;
-  min-width: 560px;
+  min-width: max-content;
   background: rgba(10, 12, 18, 0.92);
   border: 1px solid rgba(255,255,255,.12);
   border-radius: 14px;
@@ -683,15 +683,17 @@ a { color: inherit; text-decoration: none; }
 }
 
 .capacityGrid {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  display: flex;
+  flex-wrap: nowrap;
   gap: 0;
   margin-bottom: 14px;
+  white-space: nowrap;
 }
 
 .capacityStat {
-  padding: 0 14px;
+  padding: 0 18px;
   border-left: 1px solid rgba(255,255,255,.10);
+  flex-shrink: 0;
 }
 .capacityStat:first-child { border-left: none; padding-left: 0; }
 
