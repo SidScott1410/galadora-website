@@ -1,0 +1,35 @@
+# Galadora Technologies
+
+> Galadora builds and operates distributed, air-gapped AI infrastructure for enterprises and governments — sovereign-capable, power-ready, and built from first principles.
+
+## About
+
+Galadora Technologies is an AI infrastructure company focused on microscale, distributed deployment of AI compute. Unlike hyperscale data centers, Galadora's approach is designed for sovereign, air-gapped, and edge-deployable environments where data residency, security, and physical footprint are critical constraints.
+
+## Core Product: The Meridian Project
+
+The Meridian Project is Galadora's reference architecture for distributed AI inference infrastructure. It is designed to be deployable at enterprise and government scale, with full air-gap capability, sovereign data controls, and a modular power architecture.
+
+## Key Differentiators
+
+- **Microscale**: Designed for deployments that do not require hyperscale infrastructure
+- **Air-gapped**: Full network isolation capability for classified and sovereign environments
+- **Sovereign-capable**: Data residency and control remain entirely with the operator
+- **Power-ready**: Integrated power architecture built from first principles
+- **Distributed**: Inference workloads distributed across nodes rather than centralized
+
+## Team Background
+
+Built by leaders from: Apple, Amazon, Zayo, Digital Realty, Vantage Data Centers, Meta, OpenAI, U.S. Department of Energy, NVIDIA, and Cisco.
+
+## Pages
+
+- [Home](https://galadora.com/) — Hero and company overview
+- [Our Platform](https://galadora.com/platform) — Integrated infrastructure platform details
+- [The Meridian Project](https://galadora.com/meridian) — Reference architecture and product
+- [About Us](https://galadora.com/about) — Team and company background
+- [Contact](https://galadora.com/contact) — Business inquiries
+
+## Contact
+
+For business inquiries, partnerships, or investor relations, visit https://galadora.com/contact

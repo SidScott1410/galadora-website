@@ -1,0 +1,58 @@
+# Galadora Technologies — robots.txt
+# https://galadora.com
+
+# Allow all crawlers
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /__manus__/
+
+# Google
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 0
+
+User-agent: Googlebot-Image
+Allow: /
+
+# Bing
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 1
+
+# AI / LLM crawlers — explicitly permitted
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+User-agent: Gemini
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: cohere-ai
+Allow: /
+
+User-agent: Diffbot
+Allow: /
+
+# Sitemap
+Sitemap: https://galadora.com/sitemap.xml
