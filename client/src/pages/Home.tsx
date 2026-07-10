@@ -223,7 +223,7 @@ function GetInTouchModal({ onClose }: { onClose: () => void }) {
 // ─── Capacity panel (hover slide-up) ─────────────────────────────────────────
 const STATS = [
   { value: "145 MW",  label: "Delivered",          sub: "Operational" },
-  { value: "10 MW",   label: "Under Development",  sub: "Node 01 — FID 2026" },
+  { value: "10 MW",   label: "Under Development",  sub: "FID 2026" },
   { value: "40 MW",   label: "Under Exclusivity",  sub: "Exclusive option agreements" },
   { value: "100 MW",  label: "Under Diligence",    sub: "Active site pipeline" },
   { value: "1 GW",    label: "Program Target",     sub: "10-year horizon" },
