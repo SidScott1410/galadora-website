@@ -222,10 +222,11 @@ function GetInTouchModal({ onClose }: { onClose: () => void }) {
 
 // ─── Stats strip ─────────────────────────────────────────────────────────────
 const STATS = [
-  { value: "145 MW",  label: "Delivered",             sub: "Operational — Meridian ecosystem" },
-  { value: "165 MW",  label: "Near-term pipeline",     sub: "Delivered + Phase 1 + Phase 2" },
-  { value: "140 MW",  label: "Under exclusivity",      sub: "Exclusivity + diligence" },
-  { value: "1 GW",    label: "Program target",         sub: "~100 nodes over 10-year horizon" },
+  { value: "145 MW",  label: "Delivered",            sub: "Operational" },
+  { value: "10 MW",   label: "Under Development",    sub: "Node 01 — FID 2026" },
+  { value: "40 MW",   label: "Under Exclusivity",    sub: "Exclusive option agreements" },
+  { value: "100 MW",  label: "Under Diligence",      sub: "Active site pipeline" },
+  { value: "1 GW",    label: "Program Target",       sub: "~100 nodes, 10-year horizon" },
 ];
 
 function StatsStrip() {
@@ -241,8 +242,8 @@ function StatsStrip() {
         ))}
       </div>
       <p className={styles.statsFootnote}>
-        As of June 2026. Delivered capacity reflects ecosystem track record.
-        Node 01 is the inaugural Galadora-sponsored deployment.
+        As of June 2026.
+        {" "}<span className={styles.statsFootnoteDim}>Delivered capacity is attributable to The Meridian Project (TMP), an affiliated ecosystem. Node 01 is the inaugural Galadora-sponsored deployment. Tenant identities withheld; available under NDA.</span>
       </p>
     </section>
   );
