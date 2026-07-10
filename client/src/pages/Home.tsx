@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 
 const VIDEO_URL = "/manus-storage/hero-bg_e417fdab.mp4";
+const LOGO_WHITE = "/manus-storage/galadora_logo_white_5e60196f.png";
+const LOGO_INK   = "/manus-storage/galadora_logo_ink_eab9caef.png";
 
 // ─── Inner placeholder pages ───────────────────────────────────────────────
 function InnerPage({ title, kicker }: { title: string; kicker: string }) {
@@ -9,51 +11,26 @@ function InnerPage({ title, kicker }: { title: string; kicker: string }) {
       <div className="kicker">{kicker}</div>
       <h1>{title}</h1>
       <p>
-        Placeholder page. Replace this content with your own sections, media,
-        and calls to action styled to match your brand.
+        This section is a placeholder. Replace with your own content, media,
+        and calls to action styled to match Galadora's brand.
       </p>
     </div>
   );
 }
 
-// ─── Starburst / sunburst logo placeholder ─────────────────────────────────
-function StarburstLogo() {
-  const rays = Array.from({ length: 24 }, (_, i) => i * 15);
-  const lengths = [22, 18, 22, 16, 22, 20, 22, 16, 22, 20, 22, 16, 22, 18, 22, 16, 22, 20, 22, 16, 22, 20, 22, 16];
-  return (
-    <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <g transform="translate(60,60)">
-        {rays.map((angle, i) => (
-          <rect
-            key={angle}
-            x="-2.5"
-            y={-56}
-            width="5"
-            height={lengths[i]}
-            rx="2"
-            fill="white"
-            transform={`rotate(${angle})`}
-          />
-        ))}
-      </g>
-    </svg>
-  );
-}
-
 // ─── Pages config ──────────────────────────────────────────────────────────
 const NAV_PAGES = [
-  { id: "home",     label: "Home" },
-  { id: "platform", label: "[Page Two]" },
-  { id: "about",    label: "[About]" },
-  { id: "news",     label: "[News]" },
-  { id: "contact",  label: "[Contact]" },
+  { id: "home",      label: "Home" },
+  { id: "platform",  label: "Platform" },
+  { id: "meridian",  label: "The Meridian Project" },
+  { id: "about",     label: "About" },
+  { id: "contact",   label: "Contact" },
 ];
 
 export default function Home() {
   const [activePage, setActivePage] = useState("home");
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [menuOpen, setMenuOpen]     = useState(false);
 
-  // Close menu on Escape
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
       if (e.key === "Escape") setMenuOpen(false);
@@ -70,14 +47,13 @@ export default function Home() {
 
   return (
     <>
-      {/* ── Global styles injected once ── */}
       <style>{`
-        /* Reset & base */
+        /* ── Reset & base ── */
         *, *::before, *::after { box-sizing: border-box; }
         html, body { margin: 0; height: 100%; }
         body {
           font-family: "Helvetica Neue", Helvetica, Arial, system-ui, sans-serif;
-          background: #0c0d10;
+          background: #08090b;
           color: #fff;
           -webkit-font-smoothing: antialiased;
           overflow-x: hidden;
@@ -89,9 +65,10 @@ export default function Home() {
           --ink: #ffffff;
           --ink-dim: rgba(255,255,255,.72);
           --ink-muted: rgba(255,255,255,.50);
-          --hairline: rgba(255,255,255,.38);
-          --edge: clamp(22px, 4vw, 52px);
-          --top: clamp(20px, 3.2vw, 38px);
+          --hairline: rgba(255,255,255,.35);
+          --edge: clamp(24px, 4vw, 56px);
+          --top: clamp(20px, 3vw, 36px);
+          --accent: #4A90D9;
         }
 
         /* ── Persistent chrome ── */
@@ -107,27 +84,32 @@ export default function Home() {
         }
         .chrome > * { pointer-events: auto; }
 
+        /* Logo */
         .logo-wrap {
           display: inline-block;
-          width: clamp(80px, 10.5vw, 148px);
-          aspect-ratio: 1;
-          color: #fff;
-          flex-shrink: 0;
           cursor: pointer;
+          flex-shrink: 0;
+          height: clamp(28px, 3.2vw, 44px);
+          /* white version sits on dark hero */
         }
-        .logo-wrap svg { width: 100%; height: 100%; display: block; }
+        .logo-wrap img {
+          height: 100%;
+          width: auto;
+          display: block;
+          object-fit: contain;
+        }
 
         /* Menu pill */
         .pill {
           display: inline-flex;
           align-items: center;
-          gap: 18px;
+          gap: 16px;
           background: #fff;
           color: #111;
           border: none;
           border-radius: 10px;
-          padding: 13px 18px 13px 22px;
-          font-size: 1.05rem;
+          padding: 12px 16px 12px 20px;
+          font-size: 1rem;
           font-weight: 500;
           font-family: inherit;
           letter-spacing: .01em;
@@ -140,8 +122,8 @@ export default function Home() {
         /* Burger */
         .burger {
           position: relative;
-          width: 28px;
-          height: 16px;
+          width: 26px;
+          height: 15px;
           flex-shrink: 0;
         }
         .burger span {
@@ -152,57 +134,67 @@ export default function Home() {
           border-radius: 2px;
           transition: transform .32s ease, opacity .22s ease, width .22s ease;
         }
-        .burger span:nth-child(1) { top: 0; width: 100%; }
-        .burger span:nth-child(2) { top: 7px; width: 65%; }
-        .burger span:nth-child(3) { top: 14px; width: 100%; }
-        .burger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+        .burger span:nth-child(1) { top: 0;    width: 100%; }
+        .burger span:nth-child(2) { top: 6.5px; width: 62%; }
+        .burger span:nth-child(3) { top: 13px;  width: 100%; }
+        .burger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
         .burger.open span:nth-child(2) { opacity: 0; width: 0; }
-        .burger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+        .burger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
 
-        /* ── Overlay ── */
+        /* ── Full-screen overlay nav ── */
         .overlay {
           position: fixed;
           inset: 0;
           z-index: 40;
-          background: rgba(8,9,11,.97);
-          backdrop-filter: blur(8px);
-          -webkit-backdrop-filter: blur(8px);
+          background: rgba(6,7,9,.97);
+          backdrop-filter: blur(10px);
+          -webkit-backdrop-filter: blur(10px);
           display: flex;
           flex-direction: column;
           justify-content: center;
           padding: 0 var(--edge);
           opacity: 0;
           visibility: hidden;
-          transition: opacity .4s ease, visibility .4s;
+          transition: opacity .38s ease, visibility .38s;
         }
         .overlay.open { opacity: 1; visibility: visible; }
         .overlay nav {
           display: flex;
           flex-direction: column;
-          gap: clamp(4px, 1.2vh, 12px);
+          gap: clamp(2px, 1vh, 10px);
           max-width: 1280px;
           margin: 0 auto;
           width: 100%;
         }
         .overlay a {
-          font-size: clamp(2.2rem, 6.5vw, 4.8rem);
+          font-size: clamp(2rem, 6vw, 4.5rem);
           font-weight: 600;
           line-height: 1.1;
-          color: rgba(255,255,255,.5);
+          color: rgba(255,255,255,.42);
           letter-spacing: -.025em;
           width: fit-content;
           opacity: 0;
-          transform: translateY(20px);
-          transition: color .2s ease, opacity .42s ease, transform .42s ease;
+          transform: translateY(18px);
+          transition: color .2s ease, opacity .4s ease, transform .4s ease;
           cursor: pointer;
         }
         .overlay a:hover { color: #fff; }
         .overlay.open a { opacity: 1; transform: none; }
-        .overlay.open a:nth-child(1) { transition-delay: .07s; }
-        .overlay.open a:nth-child(2) { transition-delay: .13s; }
-        .overlay.open a:nth-child(3) { transition-delay: .19s; }
-        .overlay.open a:nth-child(4) { transition-delay: .25s; }
-        .overlay.open a:nth-child(5) { transition-delay: .31s; }
+        .overlay.open a:nth-child(1) { transition-delay: .06s; }
+        .overlay.open a:nth-child(2) { transition-delay: .12s; }
+        .overlay.open a:nth-child(3) { transition-delay: .18s; }
+        .overlay.open a:nth-child(4) { transition-delay: .24s; }
+        .overlay.open a:nth-child(5) { transition-delay: .30s; }
+
+        /* Overlay logo (white, bottom-left) */
+        .overlay-logo {
+          position: absolute;
+          bottom: var(--top);
+          left: var(--edge);
+          height: 28px;
+          opacity: .5;
+        }
+        .overlay-logo img { height: 100%; width: auto; display: block; }
 
         /* ── Hero ── */
         .hero {
@@ -226,8 +218,8 @@ export default function Home() {
           inset: 0;
           z-index: 0;
           background:
-            radial-gradient(110% 70% at 28% 0%, rgba(200,155,80,.5), transparent 52%),
-            linear-gradient(155deg, #3b3228, #161820 58%, #0a0b0e);
+            radial-gradient(110% 70% at 28% 0%, rgba(74,144,217,.25), transparent 52%),
+            linear-gradient(155deg, #1a2030, #0c0e14 58%, #060709);
         }
         .hero .scrim {
           position: absolute;
@@ -235,10 +227,10 @@ export default function Home() {
           z-index: 2;
           background: linear-gradient(
             180deg,
-            rgba(0,0,0,.28) 0%,
-            transparent 22%,
-            transparent 52%,
-            rgba(0,0,0,.50) 100%
+            rgba(0,0,0,.32) 0%,
+            transparent 20%,
+            transparent 50%,
+            rgba(0,0,0,.55) 100%
           );
         }
         .hero-content {
@@ -261,14 +253,14 @@ export default function Home() {
         .ticks {
           position: absolute;
           right: var(--edge);
-          top: calc(58% - 16px);
+          top: calc(58% - 14px);
           display: flex;
-          gap: 9px;
+          gap: 8px;
           align-items: center;
         }
         .ticks i {
           display: block;
-          width: 36px;
+          width: 32px;
           height: 2px;
           background: var(--hairline);
           border-radius: 2px;
@@ -279,24 +271,25 @@ export default function Home() {
         .brand-label {
           position: absolute;
           left: var(--edge);
-          top: calc(58% + 20px);
-          font-size: clamp(1.2rem, 2.2vw, 1.75rem);
+          top: calc(58% + 14px);
+          font-size: clamp(1rem, 1.8vw, 1.5rem);
           font-weight: 500;
           letter-spacing: .01em;
           line-height: 1;
+          color: rgba(255,255,255,.88);
         }
 
         /* Headline */
         .headline {
           position: absolute;
           left: 50%;
-          top: calc(58% + 10px);
-          transform: translateX(-46%);
+          top: calc(58% - 2px);
+          transform: translate(-46%, -50%);
           text-align: left;
-          font-size: clamp(2.4rem, 5.8vw, 5rem);
+          font-size: clamp(2.2rem, 5.4vw, 4.8rem);
           font-weight: 700;
           line-height: 1.06;
-          letter-spacing: -.025em;
+          letter-spacing: -.028em;
           margin: 0;
           white-space: nowrap;
         }
@@ -305,7 +298,7 @@ export default function Home() {
         .learn-wrap {
           position: absolute;
           right: var(--edge);
-          top: calc(58% + 18px);
+          top: calc(58% + 14px);
           display: flex;
           flex-direction: column;
           align-items: flex-end;
@@ -316,12 +309,12 @@ export default function Home() {
           color: #fff;
         }
         .learn-text {
-          font-size: clamp(.9rem, 1.5vw, 1.25rem);
+          font-size: clamp(.85rem, 1.4vw, 1.15rem);
           font-weight: 500;
           letter-spacing: .01em;
         }
         .learn-arrow {
-          font-size: 1.25rem;
+          font-size: 1.2rem;
           line-height: 1;
           display: block;
           transition: transform .28s ease;
@@ -332,21 +325,22 @@ export default function Home() {
         .intro {
           position: absolute;
           left: var(--edge);
-          bottom: clamp(30px, 6.5vh, 64px);
-          max-width: min(44ch, 40vw);
+          bottom: clamp(28px, 6vh, 60px);
+          max-width: min(42ch, 38vw);
         }
         .intro .eyebrow {
-          font-size: .95rem;
+          font-size: .88rem;
           font-weight: 700;
-          letter-spacing: .01em;
-          margin: 0 0 12px;
-          color: #fff;
+          letter-spacing: .06em;
+          text-transform: uppercase;
+          margin: 0 0 10px;
+          color: rgba(255,255,255,.95);
         }
         .intro p {
           margin: 0;
           color: var(--ink-dim);
-          font-size: .97rem;
-          line-height: 1.55;
+          font-size: .94rem;
+          line-height: 1.58;
         }
 
         /* ── Inner pages ── */
@@ -356,25 +350,25 @@ export default function Home() {
           flex-direction: column;
           justify-content: center;
           padding: 120px var(--edge) 80px;
-          background: #0c0d10;
+          background: #08090b;
         }
         .kicker {
           color: var(--ink-muted);
           font-weight: 700;
           letter-spacing: .18em;
           text-transform: uppercase;
-          font-size: .78rem;
-          margin-bottom: 20px;
+          font-size: .75rem;
+          margin-bottom: 18px;
         }
         .inner-page h1 {
-          font-size: clamp(2.6rem, 7vw, 5.5rem);
+          font-size: clamp(2.4rem, 6.5vw, 5rem);
           font-weight: 700;
           letter-spacing: -.025em;
-          margin: 0 0 24px;
+          margin: 0 0 22px;
           line-height: 1.04;
         }
         .inner-page p {
-          max-width: 54ch;
+          max-width: 52ch;
           color: var(--ink-dim);
           font-size: 1.05rem;
           line-height: 1.65;
@@ -388,25 +382,25 @@ export default function Home() {
             position: absolute;
             left: var(--edge);
             top: auto;
-            bottom: calc(clamp(30px,6.5vh,64px) + 200px);
-            font-size: 1.15rem;
+            bottom: calc(clamp(28px,6vh,60px) + 190px);
+            font-size: 1.1rem;
           }
           .headline {
             position: absolute;
             left: var(--edge);
             right: var(--edge);
-            top: 36%;
+            top: 34%;
             transform: none;
             text-align: left;
             white-space: normal;
-            font-size: clamp(2.2rem, 9.5vw, 3.6rem);
+            font-size: clamp(2rem, 9vw, 3.4rem);
           }
           .learn-wrap {
             position: absolute;
             right: auto;
             left: var(--edge);
             top: auto;
-            bottom: calc(clamp(30px,6.5vh,64px) + 160px);
+            bottom: calc(clamp(28px,6vh,60px) + 148px);
             flex-direction: row;
             align-items: center;
             gap: 12px;
@@ -428,11 +422,11 @@ export default function Home() {
           className="logo-wrap"
           onClick={() => showPage("home")}
           role="button"
-          aria-label="[Brand Name] home"
+          aria-label="Galadora home"
           tabIndex={0}
           onKeyDown={(e) => e.key === "Enter" && showPage("home")}
         >
-          <StarburstLogo />
+          <img src={LOGO_WHITE} alt="Galadora" />
         </div>
 
         <button
@@ -440,13 +434,13 @@ export default function Home() {
           onClick={() => setMenuOpen((o) => !o)}
           aria-expanded={menuOpen}
           aria-controls="overlay"
-          aria-label="Open menu"
+          aria-label="Open navigation menu"
         >
-          <span>[Brand Name]</span>
-          <span className="burger" aria-hidden="true">
-            <span className={menuOpen ? "open" : ""} />
-            <span className={menuOpen ? "open" : ""} />
-            <span className={menuOpen ? "open" : ""} />
+          <span>Galadora</span>
+          <span className={`burger${menuOpen ? " open" : ""}`} aria-hidden="true">
+            <span />
+            <span />
+            <span />
           </span>
         </button>
       </div>
@@ -471,6 +465,9 @@ export default function Home() {
             </a>
           ))}
         </nav>
+        <div className="overlay-logo">
+          <img src={LOGO_WHITE} alt="Galadora" />
+        </div>
       </div>
 
       {/* ── Pages ── */}
@@ -490,28 +487,29 @@ export default function Home() {
               <i />
             </div>
 
-            <div className="brand-label">[Brand Name]</div>
+            <div className="brand-label">Galadora</div>
 
             <h1 className="headline">
-              [Your Primary]<br />[Headline Here]
+              Where Compute<br />Meets the World
             </h1>
 
             <a
               className="learn-wrap"
               href="#"
               onClick={(e) => { e.preventDefault(); showPage("platform"); }}
-              aria-label="Learn more"
+              aria-label="Learn more about Galadora"
             >
               <span className="learn-text">Learn More</span>
               <span className="learn-arrow" aria-hidden="true">↓</span>
             </a>
 
             <div className="intro">
-              <p className="eyebrow">[Category / Tagline]</p>
+              <p className="eyebrow">Distributed AI Infrastructure</p>
               <p>
-                [Your company develops and operates a brief one-to-two sentence
-                description of what you do, who you serve, and why it matters
-                to your audience.]
+                Galadora builds and operates the distributed infrastructure
+                that brings AI compute to where the world's enterprises and
+                governments actually need it — power-ready,
+                sovereign-capable, and fast to deploy.
               </p>
             </div>
           </div>
@@ -519,16 +517,22 @@ export default function Home() {
       )}
 
       {activePage === "platform" && (
-        <InnerPage title="[Platform / Services]" kicker="[Page Two]" />
+        <InnerPage
+          title="Our Integrated Platform"
+          kicker="Platform"
+        />
+      )}
+      {activePage === "meridian" && (
+        <InnerPage
+          title="The Meridian Project"
+          kicker="Distributed AI Infrastructure for Global Inference"
+        />
       )}
       {activePage === "about" && (
-        <InnerPage title="[About Us]" kicker="[About]" />
-      )}
-      {activePage === "news" && (
-        <InnerPage title="[News & Updates]" kicker="[News]" />
+        <InnerPage title="About Galadora" kicker="About" />
       )}
       {activePage === "contact" && (
-        <InnerPage title="[Contact Us]" kicker="[Contact]" />
+        <InnerPage title="Get in Touch" kicker="Contact" />
       )}
     </>
   );
