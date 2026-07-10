@@ -6,14 +6,16 @@ const LOGO_WHITE = "/manus-storage/galadora_logo_white_5e60196f.png";
 
 // ─── Companies carousel ────────────────────────────────────────────────────
 const COMPANIES = [
-  "Google DeepMind",
-  "Amazon Web Services",
-  "Microsoft Azure",
-  "Palantir Technologies",
-  "Lockheed Martin",
-  "Goldman Sachs",
-  "McKinsey & Company",
+  "Apple",
+  "Amazon",
+  "Zayo",
+  "Digital Realty",
+  "Vantage Data Centers",
+  "Meta",
+  "OpenAI",
+  "U.S. Department of Energy",
   "NVIDIA",
+  "Cisco",
 ];
 
 function CompanyCarousel() {
@@ -246,7 +248,7 @@ export default function Home() {
                 <p className={styles.introCopy}>
                   Galadora builds microscale, air-gapped AI infrastructure
                   for enterprises and governments — sovereign-capable,
-                  power-ready, and deployable at 10 MW and below.
+                  power-ready, and built from first principles.
                 </p>
               </div>
 
