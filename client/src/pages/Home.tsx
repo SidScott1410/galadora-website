@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback, FormEvent } from "react";
 import styles from "./Home.module.css";
 
 const VIDEO_URL  = "/manus-storage/hero-bg_e417fdab.mp4";
@@ -38,6 +38,188 @@ function CompanyMarquee() {
   );
 }
 
+// ─── Get In Touch modal ────────────────────────────────────────────────────
+type ModalState = "idle" | "submitting" | "success";
+
+function GetInTouchModal({ onClose }: { onClose: () => void }) {
+  const [state, setState] = useState<ModalState>("idle");
+  const firstFieldRef = useRef<HTMLInputElement>(null);
+  const backdropRef   = useRef<HTMLDivElement>(null);
+
+  // Focus first field on open
+  useEffect(() => {
+    firstFieldRef.current?.focus();
+  }, []);
+
+  // Trap Escape key
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [onClose]);
+
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setState("submitting");
+    // Simulate async submission (wire to real endpoint when ready)
+    setTimeout(() => setState("success"), 1200);
+  };
+
+  return (
+    <div
+      ref={backdropRef}
+      className={styles.modalBackdrop}
+      role="dialog"
+      aria-modal="true"
+      aria-label="Get in touch with Galadora"
+      onClick={(e) => e.target === backdropRef.current && onClose()}
+    >
+      <div className={styles.modalCard}>
+        {/* Close button */}
+        <button
+          className={styles.modalClose}
+          onClick={onClose}
+          aria-label="Close"
+        >
+          <span aria-hidden="true">✕</span>
+        </button>
+
+        {state === "success" ? (
+          <div className={styles.modalSuccess}>
+            <div className={styles.modalSuccessIcon} aria-hidden="true">✓</div>
+            <h2 className={styles.modalTitle}>Message received.</h2>
+            <p className={styles.modalSubtitle}>
+              We will be in touch within one business day.
+            </p>
+            <button className={styles.modalSubmitBtn} onClick={onClose}>
+              Close
+            </button>
+          </div>
+        ) : (
+          <>
+            <div className={styles.modalHeader}>
+              <p className={styles.modalEyebrow}>Galadora Technologies</p>
+              <h2 className={styles.modalTitle}>Get in Touch</h2>
+              <p className={styles.modalSubtitle}>
+                Tell us about your infrastructure requirements and we will
+                reach out to discuss how Galadora can help.
+              </p>
+            </div>
+
+            <form
+              className={styles.modalForm}
+              onSubmit={handleSubmit}
+              noValidate
+            >
+              <div className={styles.modalRow}>
+                <div className={styles.modalField}>
+                  <label className={styles.modalLabel} htmlFor="git-name">
+                    Full Name <span aria-hidden="true">*</span>
+                  </label>
+                  <input
+                    ref={firstFieldRef}
+                    id="git-name"
+                    name="name"
+                    type="text"
+                    className={styles.modalInput}
+                    placeholder="Jane Smith"
+                    required
+                    autoComplete="name"
+                  />
+                </div>
+                <div className={styles.modalField}>
+                  <label className={styles.modalLabel} htmlFor="git-email">
+                    Work Email <span aria-hidden="true">*</span>
+                  </label>
+                  <input
+                    id="git-email"
+                    name="email"
+                    type="email"
+                    className={styles.modalInput}
+                    placeholder="jane@company.com"
+                    required
+                    autoComplete="email"
+                  />
+                </div>
+              </div>
+
+              <div className={styles.modalRow}>
+                <div className={styles.modalField}>
+                  <label className={styles.modalLabel} htmlFor="git-org">
+                    Organization <span aria-hidden="true">*</span>
+                  </label>
+                  <input
+                    id="git-org"
+                    name="organization"
+                    type="text"
+                    className={styles.modalInput}
+                    placeholder="Acme AI Labs"
+                    required
+                    autoComplete="organization"
+                  />
+                </div>
+                <div className={styles.modalField}>
+                  <label className={styles.modalLabel} htmlFor="git-role">
+                    Role
+                  </label>
+                  <input
+                    id="git-role"
+                    name="role"
+                    type="text"
+                    className={styles.modalInput}
+                    placeholder="Head of Infrastructure"
+                    autoComplete="organization-title"
+                  />
+                </div>
+              </div>
+
+              <div className={styles.modalField}>
+                <label className={styles.modalLabel} htmlFor="git-interest">
+                  Area of Interest
+                </label>
+                <select
+                  id="git-interest"
+                  name="interest"
+                  className={styles.modalSelect}
+                >
+                  <option value="">Select one...</option>
+                  <option value="compute">Compute Infrastructure</option>
+                  <option value="power">Power &amp; Energy</option>
+                  <option value="airgapped">Air-Gapped Deployments</option>
+                  <option value="sovereign">Sovereign AI Capability</option>
+                  <option value="partnership">Partnership / Investment</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+
+              <div className={styles.modalField}>
+                <label className={styles.modalLabel} htmlFor="git-message">
+                  Message
+                </label>
+                <textarea
+                  id="git-message"
+                  name="message"
+                  className={styles.modalTextarea}
+                  placeholder="Briefly describe your compute needs or questions..."
+                  rows={4}
+                />
+              </div>
+
+              <button
+                type="submit"
+                className={styles.modalSubmitBtn}
+                disabled={state === "submitting"}
+              >
+                {state === "submitting" ? "Sending…" : "Send Message →"}
+              </button>
+            </form>
+          </>
+        )}
+      </div>
+    </div>
+  );
+}
+
 // ─── Nav config ────────────────────────────────────────────────────────────
 const NAV_PAGES = [
   { id: "home",     label: "Home" },
@@ -65,27 +247,33 @@ function InnerPage({ title, kicker }: { title: string; kicker: string }) {
 
 // ─── Main component ────────────────────────────────────────────────────────
 export default function Home() {
-  const [activePage, setActivePage] = useState("home");
-  const [menuOpen, setMenuOpen]     = useState(false);
-  const [videoReady, setVideoReady] = useState(false);
+  const [activePage,  setActivePage]  = useState("home");
+  const [menuOpen,    setMenuOpen]    = useState(false);
+  const [videoReady,  setVideoReady]  = useState(false);
+  const [modalOpen,   setModalOpen]   = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
-  // Keyboard: Escape closes menu
+  // Keyboard: Escape closes menu (modal handles its own Escape)
   useEffect(() => {
-    const handler = (e: KeyboardEvent) => { if (e.key === "Escape") setMenuOpen(false); };
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && !modalOpen) setMenuOpen(false);
+    };
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
-  }, []);
+  }, [modalOpen]);
 
-  // iOS autoplay: attempt programmatic play on mount and on any user interaction
+  // Lock body scroll when modal is open
+  useEffect(() => {
+    document.body.style.overflow = modalOpen ? "hidden" : "";
+    return () => { document.body.style.overflow = ""; };
+  }, [modalOpen]);
+
+  // iOS autoplay
   useEffect(() => {
     const vid = videoRef.current;
     if (!vid) return;
-
     const tryPlay = () => {
       vid.play().catch(() => {
-        // iOS requires muted + playsInline — already set. If it still fails,
-        // listen for first touch/click and retry once.
         const retry = () => {
           vid.play().catch(() => {});
           document.removeEventListener("touchstart", retry);
@@ -95,13 +283,8 @@ export default function Home() {
         document.addEventListener("click", retry, { once: true });
       });
     };
-
-    if (vid.readyState >= 3) {
-      tryPlay();
-    } else {
-      vid.addEventListener("canplay", tryPlay, { once: true });
-    }
-
+    if (vid.readyState >= 3) { tryPlay(); }
+    else { vid.addEventListener("canplay", tryPlay, { once: true }); }
     return () => vid.removeEventListener("canplay", tryPlay);
   }, []);
 
@@ -116,12 +299,20 @@ export default function Home() {
     window.scrollTo(0, 0);
   };
 
+  const openModal  = (e: React.MouseEvent | React.KeyboardEvent) => {
+    e.preventDefault();
+    setModalOpen(true);
+  };
+
   const overlayClass = [styles.overlay, menuOpen ? styles.overlayOpen : ""].join(" ").trim();
   const burgerClass  = [styles.burger,  menuOpen ? styles.burgerOpen  : ""].join(" ").trim();
   const videoClass   = [styles.heroVideo, videoReady ? styles.heroVideoReady : ""].join(" ").trim();
 
   return (
     <>
+      {/* ── Get In Touch modal ── */}
+      {modalOpen && <GetInTouchModal onClose={() => setModalOpen(false)} />}
+
       {/* ── Persistent Chrome ── */}
       <div className={styles.chrome}>
         <div
@@ -196,7 +387,6 @@ export default function Home() {
       {activePage === "home" && (
         <main>
           <div className={styles.hero}>
-            {/* Fallback gradient — visible until video plays */}
             <div className={styles.videoFallback} aria-hidden="true" />
 
             <video
@@ -216,7 +406,7 @@ export default function Home() {
 
             <div className={styles.scrim} aria-hidden="true" />
 
-            {/* ── Desktop layout (absolute positioned) ── */}
+            {/* ── Desktop layout ── */}
             <div className={styles.heroContentDesktop}>
               <div className={styles.midline} aria-hidden="true" />
               <div className={styles.ticks} aria-hidden="true">
@@ -228,9 +418,9 @@ export default function Home() {
               </h1>
               <a
                 className={styles.learnWrap}
-                href="#platform"
-                onClick={(e) => { e.preventDefault(); showPage("platform"); }}
-                aria-label="Learn more — view our platform"
+                href="#contact"
+                onClick={openModal}
+                aria-label="Get in touch with Galadora"
               >
                 <span className={styles.learnText}>Learn More</span>
                 <span className={styles.learnArrow} aria-hidden="true">↓</span>
@@ -246,7 +436,7 @@ export default function Home() {
               <CompanyMarquee />
             </div>
 
-            {/* ── Mobile layout (flex column, no overlapping) ── */}
+            {/* ── Mobile layout ── */}
             <div className={styles.heroContentMobile}>
               <div className={styles.mobileTop} />
               <h1 className={styles.mobileHeadline}>
@@ -256,8 +446,8 @@ export default function Home() {
                 <span className={styles.mobileBrandLabel}>Galadora</span>
                 <a
                   className={styles.mobileLearnWrap}
-                  href="#platform"
-                  onClick={(e) => { e.preventDefault(); showPage("platform"); }}
+                  href="#contact"
+                  onClick={openModal}
                 >
                   <span className={styles.learnText}>Learn More</span>
                   <span className={styles.learnArrow} aria-hidden="true">↓</span>
