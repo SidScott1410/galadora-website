@@ -220,32 +220,75 @@ function GetInTouchModal({ onClose }: { onClose: () => void }) {
   );
 }
 
-// ─── Stats strip ─────────────────────────────────────────────────────────────
+// ─── Capacity panel (hover slide-up) ─────────────────────────────────────────
 const STATS = [
-  { value: "145 MW",  label: "Delivered",            sub: "Operational" },
-  { value: "10 MW",   label: "Under Development",    sub: "Node 01 — FID 2026" },
-  { value: "40 MW",   label: "Under Exclusivity",    sub: "Exclusive option agreements" },
-  { value: "100 MW",  label: "Under Diligence",      sub: "Active site pipeline" },
-  { value: "1 GW",    label: "Program Target",       sub: "~100 nodes, 10-year horizon" },
+  { value: "145 MW",  label: "Delivered",          sub: "Operational" },
+  { value: "10 MW",   label: "Under Development",  sub: "Node 01 — FID 2026" },
+  { value: "40 MW",   label: "Under Exclusivity",  sub: "Exclusive option agreements" },
+  { value: "100 MW",  label: "Under Diligence",    sub: "Active site pipeline" },
+  { value: "1 GW",    label: "Program Target",     sub: "~100 nodes, 10-year horizon" },
 ];
 
-function StatsStrip() {
+function CapacityPill() {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  // Close on outside click (touch support)
+  useEffect(() => {
+    const handler = (e: MouseEvent | TouchEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    };
+    document.addEventListener("mousedown", handler);
+    document.addEventListener("touchstart", handler);
+    return () => {
+      document.removeEventListener("mousedown", handler);
+      document.removeEventListener("touchstart", handler);
+    };
+  }, []);
+
   return (
-    <section className={styles.statsStrip} aria-label="Platform capacity metrics">
-      <div className={styles.statsInner}>
-        {STATS.map(({ value, label, sub }) => (
-          <div key={label} className={styles.statItem}>
-            <div className={styles.statValue}>{value}</div>
-            <div className={styles.statLabel}>{label}</div>
-            <div className={styles.statSub}>{sub}</div>
-          </div>
-        ))}
+    <div
+      ref={ref}
+      className={styles.capacityRoot}
+      onMouseEnter={() => setOpen(true)}
+      onMouseLeave={() => setOpen(false)}
+    >
+      {/* Trigger pill */}
+      <button
+        className={styles.capacityPill}
+        onClick={() => setOpen((o) => !o)}
+        aria-expanded={open}
+        aria-haspopup="true"
+        aria-label="View capacity pipeline"
+      >
+        <span className={styles.capacityDot} aria-hidden="true" />
+        <span>295 MW pipeline</span>
+        <span className={[styles.capacityChevron, open ? styles.capacityChevronOpen : ""].join(" ").trim()} aria-hidden="true">▴</span>
+      </button>
+
+      {/* Slide-up panel */}
+      <div
+        className={[styles.capacityPanel, open ? styles.capacityPanelOpen : ""].join(" ").trim()}
+        role="region"
+        aria-label="Capacity pipeline breakdown"
+      >
+        <div className={styles.capacityGrid}>
+          {STATS.map(({ value, label, sub }) => (
+            <div key={label} className={styles.capacityStat}>
+              <div className={styles.capacityValue}>{value}</div>
+              <div className={styles.capacityLabel}>{label}</div>
+              <div className={styles.capacitySub}>{sub}</div>
+            </div>
+          ))}
+        </div>
+        <p className={styles.capacityNote}>
+          As of June 2026.{" "}
+          <span className={styles.capacityNoteDim}>
+            Delivered capacity attributable to The Meridian Project (TMP), an affiliated ecosystem.
+          </span>
+        </p>
       </div>
-      <p className={styles.statsFootnote}>
-        As of June 2026.
-        {" "}<span className={styles.statsFootnoteDim}>Delivered capacity is attributable to The Meridian Project (TMP), an affiliated ecosystem. Node 01 is the inaugural Galadora-sponsored deployment. Tenant identities withheld; available under NDA.</span>
-      </p>
-    </section>
+    </div>
   );
 }
 
@@ -461,6 +504,9 @@ export default function Home() {
                   for enterprises and governments — sovereign-capable,
                   power-ready, and built from first principles.
                 </p>
+                <div className={styles.capacityPillInline}>
+                  <CapacityPill />
+                </div>
               </div>
               <CompanyMarquee />
             </div>
@@ -497,7 +543,6 @@ export default function Home() {
               </div>
             </div>
           </div>
-          <StatsStrip />
         </main>
       )}
 
