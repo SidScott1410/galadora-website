@@ -590,6 +590,79 @@ a { color: inherit; text-decoration: none; }
   margin: 0 0 36px;
 }
 
+/* ── Stats strip ── */
+.statsStrip {
+  background: #08090b;
+  border-top: 1px solid rgba(255,255,255,.10);
+  padding: clamp(36px, 5vh, 56px) var(--edge);
+}
+
+.statsInner {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.statItem {
+  padding: 0 clamp(16px, 2.5vw, 36px);
+  border-left: 1px solid rgba(255,255,255,.10);
+}
+.statItem:first-child { border-left: none; padding-left: 0; }
+
+.statValue {
+  font-size: clamp(1.8rem, 3.5vw, 3rem);
+  font-weight: 700;
+  letter-spacing: -.03em;
+  line-height: 1;
+  color: #fff;
+  margin-bottom: 8px;
+}
+
+.statLabel {
+  font-size: .78rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.55);
+  margin-bottom: 5px;
+}
+
+.statSub {
+  font-size: .78rem;
+  color: rgba(255,255,255,.30);
+  line-height: 1.45;
+}
+
+.statsFootnote {
+  max-width: 1280px;
+  margin: clamp(24px, 3vh, 36px) auto 0;
+  font-size: .72rem;
+  color: rgba(255,255,255,.22);
+  line-height: 1.55;
+  padding-left: 0;
+}
+
+/* Tablet: 2x2 grid */
+@media (max-width: 860px) {
+  .statsInner {
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(24px, 4vw, 40px) 0;
+  }
+  .statItem:nth-child(odd)  { border-left: none; padding-left: 0; }
+  .statItem:nth-child(even) { border-left: 1px solid rgba(255,255,255,.10); }
+  .statItem:nth-child(3),
+  .statItem:nth-child(4) { padding-top: clamp(24px, 4vw, 40px); border-top: 1px solid rgba(255,255,255,.10); }
+}
+
+/* Mobile: single column */
+@media (max-width: 480px) {
+  .statsInner { grid-template-columns: 1fr; gap: 28px; }
+  .statItem { border-left: none !important; padding-left: 0 !important; border-top: none !important; padding-top: 0 !important; }
+  .statItem + .statItem { border-top: 1px solid rgba(255,255,255,.08) !important; padding-top: 24px !important; }
+}
+
 /* ── Get In Touch modal ── */
 @keyframes modalIn {
   from { opacity: 0; transform: translateY(24px) scale(0.97); }

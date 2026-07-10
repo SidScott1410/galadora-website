@@ -220,6 +220,34 @@ function GetInTouchModal({ onClose }: { onClose: () => void }) {
   );
 }
 
+// ─── Stats strip ─────────────────────────────────────────────────────────────
+const STATS = [
+  { value: "145 MW",  label: "Delivered",             sub: "Operational — Meridian ecosystem" },
+  { value: "165 MW",  label: "Near-term pipeline",     sub: "Delivered + Phase 1 + Phase 2" },
+  { value: "140 MW",  label: "Under exclusivity",      sub: "Exclusivity + diligence" },
+  { value: "1 GW",    label: "Program target",         sub: "~100 nodes over 10-year horizon" },
+];
+
+function StatsStrip() {
+  return (
+    <section className={styles.statsStrip} aria-label="Platform capacity metrics">
+      <div className={styles.statsInner}>
+        {STATS.map(({ value, label, sub }) => (
+          <div key={label} className={styles.statItem}>
+            <div className={styles.statValue}>{value}</div>
+            <div className={styles.statLabel}>{label}</div>
+            <div className={styles.statSub}>{sub}</div>
+          </div>
+        ))}
+      </div>
+      <p className={styles.statsFootnote}>
+        As of June 2026. Delivered capacity reflects ecosystem track record.
+        Node 01 is the inaugural Galadora-sponsored deployment.
+      </p>
+    </section>
+  );
+}
+
 // ─── Nav config ────────────────────────────────────────────────────────────
 const NAV_PAGES = [
   { id: "home",     label: "Home" },
@@ -468,6 +496,7 @@ export default function Home() {
               </div>
             </div>
           </div>
+          <StatsStrip />
         </main>
       )}
 
