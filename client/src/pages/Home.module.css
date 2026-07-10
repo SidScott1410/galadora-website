@@ -385,8 +385,9 @@ a { color: inherit; text-decoration: none; }
 }
 .carouselTrack {
   position: relative;
-  height: 24px;
+  height: 36px;
   overflow: hidden;
+  width: 220px;
 }
 .carouselItem {
   position: absolute;
@@ -401,6 +402,13 @@ a { color: inherit; text-decoration: none; }
   opacity: 0;
   transition: opacity .7s ease;
   pointer-events: none;
+}
+.carouselItem svg {
+  height: 28px;
+  width: auto;
+  max-width: 220px;
+  fill: rgba(255,255,255,.82);
+  display: block;
   white-space: nowrap;
 }
 .carouselItemActive { opacity: 1; }
