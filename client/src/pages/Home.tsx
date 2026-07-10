@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
 
-const VIDEO_URL = "/manus-storage/hero-bg_e417fdab.mp4";
+const VIDEO_URL  = "/manus-storage/hero-bg_e417fdab.mp4";
 const LOGO_WHITE = "/manus-storage/galadora_logo_white_5e60196f.png";
-const LOGO_INK   = "/manus-storage/galadora_logo_ink_eab9caef.png";
 
 // ─── Inner placeholder pages ───────────────────────────────────────────────
 function InnerPage({ title, kicker }: { title: string; kicker: string }) {
@@ -90,8 +89,9 @@ export default function Home() {
           cursor: pointer;
           flex-shrink: 0;
           height: clamp(28px, 3.2vw, 44px);
-          /* white version sits on dark hero */
+          transition: opacity .18s ease;
         }
+        .logo-wrap:hover { opacity: .82; }
         .logo-wrap img {
           height: 100%;
           width: auto;
@@ -115,9 +115,10 @@ export default function Home() {
           letter-spacing: .01em;
           box-shadow: 0 4px 20px rgba(0,0,0,.22);
           cursor: pointer;
-          transition: box-shadow .2s;
+          transition: box-shadow .2s, transform .16s cubic-bezier(0.23, 1, 0.32, 1);
         }
         .pill:hover { box-shadow: 0 6px 28px rgba(0,0,0,.30); }
+        .pill:active { transform: scale(0.97); }
 
         /* Burger */
         .burger {
@@ -177,6 +178,7 @@ export default function Home() {
           transform: translateY(18px);
           transition: color .2s ease, opacity .4s ease, transform .4s ease;
           cursor: pointer;
+          will-change: opacity, transform;
         }
         .overlay a:hover { color: #fff; }
         .overlay.open a { opacity: 1; transform: none; }
@@ -212,6 +214,7 @@ export default function Home() {
           object-fit: cover;
           object-position: center center;
           z-index: 1;
+          will-change: transform;
         }
         .hero .video-fallback {
           position: absolute;
@@ -317,7 +320,7 @@ export default function Home() {
           font-size: 1.2rem;
           line-height: 1;
           display: block;
-          transition: transform .28s ease;
+          transition: transform .28s cubic-bezier(0.23, 1, 0.32, 1);
         }
         .learn-wrap:hover .learn-arrow { transform: translateY(7px); }
 
@@ -426,7 +429,7 @@ export default function Home() {
           tabIndex={0}
           onKeyDown={(e) => e.key === "Enter" && showPage("home")}
         >
-          <img src={LOGO_WHITE} alt="Galadora" />
+          <img src={LOGO_WHITE} alt="Galadora" fetchPriority="high" loading="eager" decoding="async" />
         </div>
 
         <button
@@ -466,7 +469,7 @@ export default function Home() {
           ))}
         </nav>
         <div className="overlay-logo">
-          <img src={LOGO_WHITE} alt="Galadora" />
+          <img src={LOGO_WHITE} alt="Galadora" loading="eager" decoding="async" />
         </div>
       </div>
 
@@ -508,7 +511,7 @@ export default function Home() {
               <p>
                 Galadora builds and operates the distributed infrastructure
                 that brings AI compute to where the world's enterprises and
-                governments actually need it — power-ready,
+                governments actually need it: power-ready, air-gapped,
                 sovereign-capable, and fast to deploy.
               </p>
             </div>
