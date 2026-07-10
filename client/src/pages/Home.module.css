@@ -367,51 +367,87 @@ a { color: inherit; text-decoration: none; }
   line-height: 1.55;
 }
 
-/* Desktop carousel */
-.carouselWrap {
-  position: absolute;
-  right: var(--edge);
-  bottom: clamp(28px, 6vh, 60px);
-  text-align: right;
-  max-width: 280px;
+/* ── Marquee (horizontal scrolling logo strip) ── */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
 }
-.carouselLabel {
+
+.marqueeWrap {
+  position: absolute;
+  right: 0;
+  bottom: clamp(28px, 6vh, 60px);
+  /* Extend to right edge of viewport, left edge is ~40% from right */
+  width: clamp(280px, 42vw, 560px);
+  overflow: hidden;
+}
+
+.marqueeLabel {
   font-size: .72rem;
   font-weight: 700;
   letter-spacing: .1em;
   text-transform: uppercase;
   color: rgba(255,255,255,.38);
   margin-bottom: 10px;
+  padding-right: var(--edge);
+  text-align: right;
 }
-.carouselTrack {
-  position: relative;
-  height: 36px;
+
+/* Fade edges */
+.marqueeStrip {
   overflow: hidden;
-  width: 220px;
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 12%,
+    black 88%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 12%,
+    black 88%,
+    transparent 100%
+  );
 }
-.carouselItem {
-  position: absolute;
-  inset: 0;
+
+.marqueeTrack {
   display: flex;
   align-items: center;
-  justify-content: flex-end;
-  font-size: 1rem;
-  font-weight: 600;
-  letter-spacing: .01em;
-  color: rgba(255,255,255,.85);
-  opacity: 0;
-  transition: opacity .7s ease;
-  pointer-events: none;
+  gap: 0;
+  width: max-content;
+  animation: marquee 28s linear infinite;
+  will-change: transform;
 }
-.carouselItem svg {
+
+/* Pause on hover/focus for accessibility */
+.marqueeStrip:hover .marqueeTrack,
+.marqueeStrip:focus-within .marqueeTrack {
+  animation-play-state: paused;
+}
+
+.marqueeItem {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 clamp(20px, 2.5vw, 36px);
+  flex-shrink: 0;
+}
+
+.marqueeItem img {
   height: 28px;
   width: auto;
-  max-width: 220px;
-  fill: rgba(255,255,255,.82);
+  max-width: 140px;
+  object-fit: contain;
   display: block;
-  white-space: nowrap;
+  /* Make all logos white/monochrome */
+  filter: brightness(0) invert(1);
+  opacity: 0.72;
+  transition: opacity .2s ease;
 }
-.carouselItemActive { opacity: 1; }
+
+.marqueeItem img:hover { opacity: 1; }
 
 /* ── Tablet breakpoint (841–1100px) ── */
 @media (max-width: 1100px) and (min-width: 841px) {
@@ -423,7 +459,7 @@ a { color: inherit; text-decoration: none; }
     max-width: 40vw;
   }
   .intro { max-width: min(38ch, 32vw); }
-  .carouselWrap { max-width: 220px; }
+  .marqueeWrap { width: clamp(240px, 38vw, 440px); }
   .overlayInner { grid-template-columns: 1fr; }
   .overlayRight { border-left: none; padding-left: 0; margin-top: 32px; }
 }
@@ -502,14 +538,15 @@ a { color: inherit; text-decoration: none; }
     width: 100%;
   }
 
-  /* Carousel — left-aligned on mobile */
-  .mobileCarousel .carouselWrap {
+  /* Marquee — full width on mobile */
+  .mobileMarquee .marqueeWrap {
     position: static;
-    text-align: left;
-    max-width: none;
+    width: 100%;
   }
-  .mobileCarousel .carouselItem { justify-content: flex-start; }
-  .mobileCarousel .carouselLabel { text-align: left; }
+  .mobileMarquee .marqueeLabel {
+    text-align: left;
+    padding-right: 0;
+  }
 
   /* Overlay: single column on mobile */
   .overlayInner {
