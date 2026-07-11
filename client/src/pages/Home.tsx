@@ -310,16 +310,7 @@ function CapacityPill() {
 
 // ─── Nav config ────────────────────────────────────────────────────────────
 const NAV_PAGES = [
-  { id: "home",     label: "Home" },
-  { id: "platform", label: "Our Platform" },
-  { id: "about",    label: "About Us" },
-  { id: "meridian", label: "News & Insights" },
-  { id: "contact",  label: "Contact" },
-];
-const BUSINESSES = [
-  { id: "power",   label: "Power",                  icon: "⚡" },
-  { id: "infra",   label: "Digital Infrastructure", icon: "🏗" },
-  { id: "compute", label: "Compute",                icon: "⬛" },
+  { id: "about", label: "About Us" },
 ];
 
 // ─── Inner placeholder pages ───────────────────────────────────────────────
@@ -446,18 +437,7 @@ export default function Home() {
               >{p.label}</button>
             ))}
           </nav>
-          <div className={styles.overlayRight} aria-label="Our Businesses">
-            <div className={styles.overlayRightLabel}>Our Businesses</div>
-            {BUSINESSES.map((b) => (
-              <button key={b.id} className={styles.bizRow} onClick={() => showPage(b.id)}>
-                <span className={styles.bizRowLeft}>
-                  <span className={styles.bizIcon} aria-hidden="true">{b.icon}</span>
-                  <span className={styles.bizName}>{b.label}</span>
-                </span>
-                <span className={styles.bizArrow} aria-hidden="true">→</span>
-              </button>
-            ))}
-          </div>
+
         </div>
         <div className={styles.overlayFooter}>
           <div className={styles.overlayLogo} aria-hidden="true">
@@ -565,13 +545,7 @@ export default function Home() {
         </main>
       )}
 
-      {activePage === "platform" && <InnerPage title="Our Integrated Platform" kicker="Platform" />}
-      {activePage === "meridian" && <InnerPage title="News & Insights" kicker="Distributed AI Infrastructure for Global Inference" />}
-      {activePage === "about"    && <InnerPage title="About Galadora" kicker="About" />}
-      {activePage === "contact"  && <InnerPage title="Get in Touch" kicker="Contact" />}
-      {activePage === "power"    && <InnerPage title="Power" kicker="Our Businesses" />}
-      {activePage === "infra"    && <InnerPage title="Digital Infrastructure" kicker="Our Businesses" />}
-      {activePage === "compute"  && <InnerPage title="Compute" kicker="Our Businesses" />}
+      {activePage === "about" && <InnerPage title="About Galadora" kicker="About" />}
     </>
   );
 }

@@ -1,9 +1,9 @@
 - [x] Extract initial Galadora branding and messaging from investor presentation pages 1-8
 - [x] Extract additional messaging and design cues from remaining PDFs
-- [ ] Upload Galadora logo assets to hosted storage for the web project
-- [ ] Update the hero page with Galadora logo, brand copy, and refined navigation/content
-- [ ] Verify the updated hero in the web viewer
-- [ ] Save a new checkpoint and deliver the revised version
+- [x] Upload Galadora logo assets to hosted storage for the web project
+- [x] Update the hero page with Galadora logo, brand copy, and refined navigation/content
+- [x] Verify the updated hero in the web viewer
+- [x] Save a new checkpoint and deliver the revised version
 
 ## Current findings
 
