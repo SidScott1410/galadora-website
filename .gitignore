@@ -32,6 +32,7 @@ node_modules/.cache/
 
 # Vite
 .vite/
+*.bak
 
 # Test coverage
 coverage/

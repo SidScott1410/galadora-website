@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback, FormEvent } from "react";
+import { trpc } from "@/lib/trpc";
 import styles from "./Home.module.css";
 
 const VIDEO_URL  = "/manus-storage/hero-bg_e417fdab.mp4";
@@ -58,11 +59,26 @@ function GetInTouchModal({ onClose }: { onClose: () => void }) {
     return () => window.removeEventListener("keydown", handler);
   }, [onClose]);
 
+  const submitMutation = trpc.contact.submit.useMutation({
+    onSuccess: () => setState("success"),
+    onError: (err) => {
+      setState("idle");
+      alert(err.message || "Something went wrong. Please try again.");
+    },
+  });
+
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setState("submitting");
-    // Simulate async submission (wire to real endpoint when ready)
-    setTimeout(() => setState("success"), 1200);
+    const fd = new FormData(e.currentTarget);
+    submitMutation.mutate({
+      name:         fd.get("name")         as string,
+      email:        fd.get("email")        as string,
+      organization: fd.get("organization") as string,
+      role:         (fd.get("role")        as string) || undefined,
+      interest:     (fd.get("interest")    as string) || undefined,
+      message:      (fd.get("message")     as string) || undefined,
+    });
   };
 
   return (
