@@ -536,6 +536,9 @@ export default function Home() {
                     for enterprises and governments — sovereign-capable,
                     power-ready, and built from first principles.
                   </p>
+                  <div className={styles.capacityPillInline}>
+                    <CapacityPill />
+                  </div>
                 </div>
                 <div className={styles.mobileMarquee}>
                   <CompanyMarquee />

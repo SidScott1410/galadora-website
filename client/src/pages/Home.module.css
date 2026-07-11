@@ -466,6 +466,18 @@ a { color: inherit; text-decoration: none; }
 
 /* ── Mobile breakpoint (≤840px) — flex column layout, no overlapping ── */
 @media (max-width: 840px) {
+  /* Capacity panel: constrain to viewport width on mobile */
+  .capacityPanel {
+    min-width: 0;
+    width: calc(100vw - 48px);
+    left: 0;
+    overflow-x: auto;
+  }
+  .capacityGrid {
+    flex-wrap: nowrap;
+    min-width: max-content;
+  }
+
   /* Hide desktop layout, show mobile layout */
   .heroContentDesktop { display: none; }
   .heroContentMobile {
