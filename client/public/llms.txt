@@ -25,11 +25,8 @@ Built by leaders from: Apple, Amazon, Zayo, Digital Realty, Vantage Data Centers
 ## Pages
 
 - [Home](https://galadora.com/) — Hero and company overview
-- [Our Platform](https://galadora.com/platform) — Integrated infrastructure platform details
-- [The Meridian Project](https://galadora.com/meridian) — Reference architecture and product
 - [About Us](https://galadora.com/about) — Team and company background
-- [Contact](https://galadora.com/contact) — Business inquiries
 
 ## Contact
 
-For business inquiries, partnerships, or investor relations, visit https://galadora.com/contact
+For business inquiries, partnerships, or investor relations, use the Get in Touch form at https://galadora.com/
