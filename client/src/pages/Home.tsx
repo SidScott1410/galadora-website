@@ -1,6 +1,10 @@
 import { useState, useEffect, useRef, useCallback, FormEvent } from "react";
-import { trpc } from "@/lib/trpc";
 import styles from "./Home.module.css";
+
+// Contact endpoint. On GitHub Pages there is no server, so this posts to an
+// external handler (Cloudflare Worker / Vercel function / Formspree) supplied
+// at build time. If unset, we fall back to mailto so the button is never dead.
+const CONTACT_ENDPOINT = import.meta.env.VITE_CONTACT_ENDPOINT as string | undefined;
 
 const VIDEO_URL  = "/manus-storage/hero-bg_e417fdab.mp4";
 const LOGO_WHITE = "/manus-storage/galadora_logo_white_5e60196f.png";
@@ -59,26 +63,45 @@ function GetInTouchModal({ onClose }: { onClose: () => void }) {
     return () => window.removeEventListener("keydown", handler);
   }, [onClose]);
 
-  const submitMutation = trpc.contact.submit.useMutation({
-    onSuccess: () => setState("success"),
-    onError: (err) => {
-      setState("idle");
-      alert(err.message || "Something went wrong. Please try again.");
-    },
-  });
-
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setState("submitting");
     const fd = new FormData(e.currentTarget);
-    submitMutation.mutate({
-      name:         fd.get("name")         as string,
-      email:        fd.get("email")        as string,
-      organization: fd.get("organization") as string,
-      role:         (fd.get("role")        as string) || undefined,
-      interest:     (fd.get("interest")    as string) || undefined,
-      message:      (fd.get("message")     as string) || undefined,
-    });
+    const payload = {
+      name:         (fd.get("name")         as string) || "",
+      email:        (fd.get("email")        as string) || "",
+      organization: (fd.get("organization") as string) || "",
+      role:         (fd.get("role")         as string) || "",
+      interest:     (fd.get("interest")     as string) || "",
+      message:      (fd.get("message")      as string) || "",
+    };
+
+    // No endpoint configured: hand off to the user's mail client rather than
+    // silently dropping an inbound enquiry.
+    if (!CONTACT_ENDPOINT) {
+      const body = Object.entries(payload)
+        .filter(([, v]) => v)
+        .map(([k, v]) => `${k}: ${v}`)
+        .join("\n");
+      window.location.href =
+        `mailto:hello@galadora.com?subject=${encodeURIComponent("Website enquiry - " + payload.organization)}` +
+        `&body=${encodeURIComponent(body)}`;
+      setState("success");
+      return;
+    }
+
+    setState("submitting");
+    try {
+      const res = await fetch(CONTACT_ENDPOINT, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      if (!res.ok) throw new Error(`Request failed (${res.status})`);
+      setState("success");
+    } catch (err) {
+      setState("idle");
+      alert(err instanceof Error ? err.message : "Something went wrong. Please try again.");
+    }
   };
 
   return (

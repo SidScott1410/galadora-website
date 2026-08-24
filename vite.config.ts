@@ -150,9 +150,24 @@ function vitePluginManusDebugCollector(): Plugin {
   };
 }
 
-const plugins = [react(), tailwindcss(), jsxLocPlugin(), vitePluginManusRuntime(), vitePluginManusDebugCollector()];
+// Manus authoring plugins are DEV-ONLY.
+// WHY: vitePluginManusRuntime inlines ~370KB of editor tooling directly into
+// the production index.html, and jsxLocPlugin stamps source-file paths onto
+// every DOM node. Neither is needed once the site leaves the Manus editor;
+// both leak internal structure and bloat first paint. Gating them to `serve`
+// drops index.html from ~375KB to ~5KB.
+const isDev = process.env.NODE_ENV !== "production";
+
+const plugins = [
+  react(),
+  tailwindcss(),
+  ...(isDev ? [jsxLocPlugin(), vitePluginManusRuntime(), vitePluginManusDebugCollector()] : []),
+];
 
 export default defineConfig({
+  // Asset URL prefix. "/" for a custom domain (galadora.com); must be
+  // "/<repo-name>/" for a github.io project page or every asset 404s.
+  base: process.env.VITE_BASE ?? "/",
   plugins,
   resolve: {
     alias: {

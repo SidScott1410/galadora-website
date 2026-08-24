@@ -1,0 +1,70 @@
+# Galadora Technologies - galadora.com
+# Builds the Vite client (dist/public) and publishes it to GitHub Pages.
+# WHY a workflow instead of committing dist/: keeps build output out of git
+# history, and guarantees the deployed bundle always matches source on main.
+name: Galadora Site Deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Least-privilege token scoped to Pages deployment only.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Never run two deploys at once; cancel-in-progress: false so a queued
+# deploy finishes rather than being killed mid-publish.
+concurrency:
+  group: galadora-site-pages
+  cancel-in-progress: false
+
+jobs:
+  build-site:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.4.1
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      # --ignore-scripts: none of the deps need postinstall hooks here, and
+      # skipping them removes an arbitrary-code-execution surface in CI.
+      - run: pnpm install --frozen-lockfile --ignore-scripts
+
+      # VITE_BASE controls asset URL prefix.
+      #   custom domain (galadora.com)        -> "/"
+      #   project page (user.github.io/repo)  -> "/galadora-website/"
+      # Set as a repo variable; defaults to "/" for the custom domain.
+      - name: Build
+        env:
+          VITE_BASE: ${{ vars.VITE_BASE || '/' }}
+          VITE_CONTACT_ENDPOINT: ${{ vars.VITE_CONTACT_ENDPOINT }}
+        run: pnpm run build:static
+
+      # SPA fallback: Pages returns 404.html for unmatched paths. Serving the
+      # same document lets the client router take over instead of hard-404ing.
+      - run: cp dist/public/index.html dist/public/404.html
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist/public
+
+  publish-site:
+    needs: build-site
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
