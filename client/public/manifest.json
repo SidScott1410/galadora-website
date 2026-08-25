@@ -1,7 +1,7 @@
 {
   "name": "Galadora Technologies",
   "short_name": "Galadora",
-  "description": "Microscale AI Infrastructure — distributed, air-gapped, sovereign-capable.",
+  "description": "Microscale AI Infrastructure - distributed, air-gapped, sovereign-capable.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#08090b",

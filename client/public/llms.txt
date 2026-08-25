@@ -1,6 +1,6 @@
 # Galadora Technologies
 
-> Galadora builds and operates distributed, air-gapped AI infrastructure for enterprises and governments — sovereign-capable, power-ready, and built from first principles.
+> Galadora builds and operates distributed, air-gapped AI infrastructure for enterprises and governments - sovereign-capable, power-ready, and built from first principles.
 
 ## About
 
@@ -24,8 +24,8 @@ Built by leaders from: Apple, Amazon, Zayo, Digital Realty, Vantage Data Centers
 
 ## Pages
 
-- [Home](https://galadora.com/) — Hero and company overview
-- [About Us](https://galadora.com/about) — Team and company background
+- [Home](https://galadora.com/) - Hero and company overview
+- [About Us](https://galadora.com/about) - Team and company background
 
 ## Contact
 

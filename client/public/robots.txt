@@ -1,4 +1,4 @@
-# Galadora Technologies — robots.txt
+# Galadora Technologies - robots.txt
 # https://galadora.com
 
 # Allow all crawlers
@@ -20,7 +20,7 @@ User-agent: Bingbot
 Allow: /
 Crawl-delay: 1
 
-# AI / LLM crawlers — explicitly permitted
+# AI / LLM crawlers - explicitly permitted
 User-agent: GPTBot
 Allow: /
 

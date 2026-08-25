@@ -6,7 +6,11 @@ import styles from "./Home.module.css";
 // at build time. If unset, we fall back to mailto so the button is never dead.
 const CONTACT_ENDPOINT = import.meta.env.VITE_CONTACT_ENDPOINT as string | undefined;
 
-const VIDEO_URL  = "/manus-storage/hero-bg_e417fdab.mp4";
+// Hero background. Path is ours now, not a Manus content hash.
+// Poster paints the first frame instantly so there is no gap between the
+// gradient fallback and the video becoming playable on slow connections.
+const VIDEO_URL    = "/media/galadora-hero.mp4";
+const VIDEO_POSTER = "/media/galadora-hero-poster.jpg";
 const LOGO_WHITE = "/manus-storage/galadora_logo_white_5e60196f.png";
 
 // ─── Company logos (real hosted images) ──────────────────────────────────────
@@ -26,15 +30,76 @@ const COMPANY_LOGOS = [
 // Duplicate the set so the marquee loops seamlessly
 const MARQUEE_LOGOS = [...COMPANY_LOGOS, ...COMPANY_LOGOS];
 
+// ─── Asset-optional rendering ────────────────────────────────────────────────
+// WHY: the media referenced above was hosted by Manus and is not in the repo.
+// A missing <img> renders as a broken-image glyph, which looks worse than
+// showing nothing. These components fail *visibly correct* rather than loud:
+// the logo degrades to a text wordmark, the marquee removes itself entirely.
+// Once the real files land in client/public/manus-storage/ both light up with
+// no further code change.
+
+function BrandMark({ alt, eager = false }: { alt: string; eager?: boolean }) {
+  const [failed, setFailed] = useState(false);
+
+  if (failed) {
+    // Letterspaced text wordmark. Inherits colour from the parent so it works
+    // in both the header and the dark overlay footer.
+    return (
+      <span
+        style={{
+          font: "600 clamp(15px,1.5vw,19px)/1 'Helvetica Neue',Helvetica,Arial,sans-serif",
+          letterSpacing: ".18em",
+          textTransform: "uppercase",
+          color: "currentColor",
+          whiteSpace: "nowrap",
+        }}
+      >
+        Galadora
+      </span>
+    );
+  }
+
+  return (
+    <img
+      src={LOGO_WHITE}
+      alt={alt}
+      onError={() => setFailed(true)}
+      {...(eager
+        ? { fetchPriority: "high" as const, loading: "eager" as const }
+        : { loading: "eager" as const })}
+      decoding="async"
+    />
+  );
+}
+
 function CompanyMarquee() {
+  // Track failures against the *unique* logo set, not the duplicated track.
+  const [broken, setBroken] = useState<Set<string>>(new Set());
+
+  const markBroken = useCallback((name: string) => {
+    setBroken((prev) => (prev.has(name) ? prev : new Set(prev).add(name)));
+  }, []);
+
+  // If every logo 404s the strip is meaningless - drop the whole section
+  // including its label, rather than leaving a floating orphan heading.
+  if (broken.size >= COMPANY_LOGOS.length) return null;
+
+  const visible = MARQUEE_LOGOS.filter(({ name }) => !broken.has(name));
+
   return (
     <div className={styles.marqueeWrap}>
       <div className={styles.marqueeLabel}>Built by leaders from</div>
       <div className={styles.marqueeStrip} aria-label="Companies our team has worked at">
         <div className={styles.marqueeTrack} aria-hidden="true">
-          {MARQUEE_LOGOS.map(({ name, src }, i) => (
+          {visible.map(({ name, src }, i) => (
             <span key={`${name}-${i}`} className={styles.marqueeItem}>
-              <img src={src} alt={name} loading="lazy" decoding="async" />
+              <img
+                src={src}
+                alt={name}
+                loading="lazy"
+                decoding="async"
+                onError={() => markBroken(name)}
+              />
             </span>
           ))}
         </div>
@@ -421,11 +486,11 @@ export default function Home() {
           className={styles.logoWrap}
           onClick={() => showPage("home")}
           role="button"
-          aria-label="Galadora — return to home"
+          aria-label="Galadora - return to home"
           tabIndex={0}
           onKeyDown={(e) => e.key === "Enter" && showPage("home")}
         >
-          <img src={LOGO_WHITE} alt="Galadora" fetchPriority="high" loading="eager" decoding="async" />
+          <BrandMark alt="Galadora" eager />
         </div>
         <button
           className={styles.pill}
@@ -464,7 +529,7 @@ export default function Home() {
         </div>
         <div className={styles.overlayFooter}>
           <div className={styles.overlayLogo} aria-hidden="true">
-            <img src={LOGO_WHITE} alt="" loading="eager" decoding="async" />
+            <BrandMark alt="" />
           </div>
           <div className={styles.overlayFooterLinks}>
             {["Careers", "Terms", "Privacy Policy"].map((l) => (
@@ -488,6 +553,7 @@ export default function Home() {
               loop
               playsInline
               preload="auto"
+              poster={VIDEO_POSTER}
               onCanPlay={handleCanPlay}
               aria-hidden="true"
               x-webkit-airplay="deny"
@@ -520,7 +586,7 @@ export default function Home() {
                 <p className={styles.eyebrow}>Microscale AI Infrastructure</p>
                 <p className={styles.introCopy}>
                   Galadora builds microscale, air-gapped AI infrastructure
-                  for enterprises and governments — sovereign-capable,
+                  for enterprises and governments - sovereign-capable,
                   power-ready, and built from first principles.
                 </p>
                 <div className={styles.capacityPillInline}>
@@ -552,7 +618,7 @@ export default function Home() {
                   <p className={styles.eyebrow}>Microscale AI Infrastructure</p>
                   <p className={styles.introCopy}>
                     Galadora builds microscale, air-gapped AI infrastructure
-                    for enterprises and governments — sovereign-capable,
+                    for enterprises and governments - sovereign-capable,
                     power-ready, and built from first principles.
                   </p>
                   <div className={styles.capacityPillInline}>
