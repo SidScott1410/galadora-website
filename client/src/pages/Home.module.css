@@ -265,26 +265,25 @@ a { color: inherit; text-decoration: none; }
   z-index: 2;
   background: linear-gradient(
     180deg,
-    rgba(0,0,0,.32) 0%,
-    transparent 20%,
-    transparent 50%,
-    rgba(0,0,0,.55) 100%
+    rgba(0,0,0,.42) 0%,
+    rgba(0,0,0,.14) 26%,
+    rgba(0,0,0,.20) 52%,
+    rgba(0,0,0,.62) 100%
   );
 }
 
-/* Light grey wash over the video.
-   WHY a separate layer rather than folding it into .scrim: the scrim is a
-   vertical gradient tuned for text legibility (dark at top and bottom, clear
-   through the middle). The wash is uniform - it lifts the blacks and pulls
-   saturation out of the whole frame so the footage reads as a background
-   texture instead of competing with the headline.
-   Tune with the alpha on --hero-wash. Around .10 is barely there; .20 starts
-   to look foggy. .14 is the balance point on dark footage. */
+/* Hero footage is bright daytime aerial (red earth, pale concrete), not the
+   dark industrial footage a light wash is designed for. On bright video a
+   light overlay does not read as haze - it lifts the whole frame toward grey
+   and collapses contrast against the white headline.
+   So this layer darkens instead: it pushes the footage back so the headline
+   sits clearly in front of it.
+   Tune with --hero-wash. .18 is subtle; .34 is heavy. .26 is the balance. */
 .scrim::after {
   content: "";
   position: absolute;
   inset: 0;
-  background: var(--hero-wash, rgba(176, 184, 196, .08));
+  background: var(--hero-wash, rgba(10, 14, 22, .26));
   pointer-events: none;
 }
 

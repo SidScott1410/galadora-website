@@ -14,17 +14,13 @@ const VIDEO_POSTER = "/media/galadora-hero-poster.jpg";
 const LOGO_WHITE = "/media/galadora-logo-white.png";
 
 // ─── Company logos (real hosted images) ──────────────────────────────────────
-const COMPANY_LOGOS = [
-  { name: "Apple",                src: "/manus-storage/logo-apple_4f9addc7.png" },
-  { name: "Amazon",               src: "/manus-storage/logo-amazon_75a9eb0e.png" },
-  { name: "Meta",                 src: "/manus-storage/logo-meta_cb5bdfc7.png" },
-  { name: "OpenAI",               src: "/manus-storage/logo-openai_37e989e1.webp" },
-  { name: "NVIDIA",               src: "/manus-storage/logo-nvidia_df0c903a.png" },
-  { name: "Cisco",                src: "/manus-storage/logo-cisco_da5af3b3.webp" },
-  { name: "Digital Realty",       src: "/manus-storage/logo-dlr_5d97bbc3.png" },
-  { name: "Vantage Data Centers", src: "/manus-storage/logo-vantage_f2326b10.webp" },
-  { name: "Zayo",                 src: "/manus-storage/logo-zayo_8c0fcd91.webp" },
-  { name: "U.S. Dept. of Energy", src: "/manus-storage/logo-doe_6020011e.png" },
+const COMPANY_LOGOS: { name: string; src: string }[] = [
+  // Emptied deliberately. These pointed at /manus-storage/, which no longer
+  // exists, so each entry fired a 404 on every page load - 20 failed requests
+  // per visit, since the track is duplicated for the seamless loop.
+  // CompanyMarquee returns null on an empty list, so nothing renders.
+  // To restore: drop files into client/public/media/ and add entries as
+  //   { name: "Example", src: "/media/logo-example.png" }
 ];
 
 // Duplicate the set so the marquee loops seamlessly
@@ -35,8 +31,8 @@ const MARQUEE_LOGOS = [...COMPANY_LOGOS, ...COMPANY_LOGOS];
 // A missing <img> renders as a broken-image glyph, which looks worse than
 // showing nothing. These components fail *visibly correct* rather than loud:
 // the logo degrades to a text wordmark, the marquee removes itself entirely.
-// Once the real files land in client/public/manus-storage/ both light up with
-// no further code change.
+// Once real files land in client/public/media/ both light up with no
+// further code change.
 
 function BrandMark({ alt, eager = false }: { alt: string; eager?: boolean }) {
   const [failed, setFailed] = useState(false);
