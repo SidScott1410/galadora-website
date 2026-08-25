@@ -14,21 +14,20 @@ const VIDEO_POSTER = "/media/galadora-hero-poster.jpg";
 const LOGO_WHITE = "/media/galadora-logo-white.png";
 
 // ─── Company logos (real hosted images) ──────────────────────────────────────
-// Companies our team has worked at. Rendered as text, not logo images: the
-// original artwork was hosted by Manus and is gone, and reproducing
-// third-party logo files carries trademark exposure that plain naming does
-// not. Edit this list to change the strip.
-const COMPANY_LOGOS: { name: string }[] = [
-  { name: "Apple" },
-  { name: "Amazon" },
-  { name: "Meta" },
-  { name: "OpenAI" },
-  { name: "NVIDIA" },
-  { name: "Cisco" },
-  { name: "Digital Realty" },
-  { name: "Vantage Data Centers" },
-  { name: "Zayo" },
-  { name: "U.S. Dept. of Energy" },
+// Companies our team has worked at.
+// Entries with `src` render as a logo image; entries without render as a text
+// wordmark, so the strip degrades gracefully if a file is ever missing.
+const COMPANY_LOGOS: { name: string; src?: string }[] = [
+  { name: "Apple",                src: "/media/logo-apple.png" },
+  { name: "Amazon",               src: "/media/logo-amazon.png" },
+  { name: "Meta",                 src: "/media/logo-meta.png" },
+  { name: "OpenAI",               src: "/media/logo-openai.png" },
+  { name: "NVIDIA",               src: "/media/logo-nvidia.png" },
+  { name: "Cisco",                src: "/media/logo-cisco.png" },
+  { name: "Digital Realty",       src: "/media/logo-dlr.png" },
+  { name: "Vantage Data Centers", src: "/media/logo-vantage.png" },
+  { name: "Zayo",                 src: "/media/logo-zayo.png" },
+  { name: "U.S. Dept. of Energy", src: "/media/logo-doe.png" },
 ];
 
 // Duplicate the set so the marquee loops seamlessly
@@ -87,9 +86,11 @@ function CompanyMarquee() {
       <div className={styles.marqueeLabel}>Built by leaders from</div>
       <div className={styles.marqueeStrip} aria-label="Companies our team has worked at">
         <div className={styles.marqueeTrack} aria-hidden="true">
-          {track.map(({ name }, i) => (
+          {track.map(({ name, src }, i) => (
             <span key={`${name}-${i}`} className={styles.marqueeItem}>
-              <span className={styles.marqueeName}>{name}</span>
+              {src
+                ? <img src={src} alt={name} loading="lazy" decoding="async" />
+                : <span className={styles.marqueeName}>{name}</span>}
             </span>
           ))}
         </div>
