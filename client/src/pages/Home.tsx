@@ -14,13 +14,21 @@ const VIDEO_POSTER = "/media/galadora-hero-poster.jpg";
 const LOGO_WHITE = "/media/galadora-logo-white.png";
 
 // ─── Company logos (real hosted images) ──────────────────────────────────────
-const COMPANY_LOGOS: { name: string; src: string }[] = [
-  // Emptied deliberately. These pointed at /manus-storage/, which no longer
-  // exists, so each entry fired a 404 on every page load - 20 failed requests
-  // per visit, since the track is duplicated for the seamless loop.
-  // CompanyMarquee returns null on an empty list, so nothing renders.
-  // To restore: drop files into client/public/media/ and add entries as
-  //   { name: "Example", src: "/media/logo-example.png" }
+// Companies our team has worked at. Rendered as text, not logo images: the
+// original artwork was hosted by Manus and is gone, and reproducing
+// third-party logo files carries trademark exposure that plain naming does
+// not. Edit this list to change the strip.
+const COMPANY_LOGOS: { name: string }[] = [
+  { name: "Apple" },
+  { name: "Amazon" },
+  { name: "Meta" },
+  { name: "OpenAI" },
+  { name: "NVIDIA" },
+  { name: "Cisco" },
+  { name: "Digital Realty" },
+  { name: "Vantage Data Centers" },
+  { name: "Zayo" },
+  { name: "U.S. Dept. of Energy" },
 ];
 
 // Duplicate the set so the marquee loops seamlessly
@@ -69,33 +77,19 @@ function BrandMark({ alt, eager = false }: { alt: string; eager?: boolean }) {
 }
 
 function CompanyMarquee() {
-  // Track failures against the *unique* logo set, not the duplicated track.
-  const [broken, setBroken] = useState<Set<string>>(new Set());
+  if (COMPANY_LOGOS.length === 0) return null;
 
-  const markBroken = useCallback((name: string) => {
-    setBroken((prev) => (prev.has(name) ? prev : new Set(prev).add(name)));
-  }, []);
-
-  // If every logo 404s the strip is meaningless - drop the whole section
-  // including its label, rather than leaving a floating orphan heading.
-  if (broken.size >= COMPANY_LOGOS.length) return null;
-
-  const visible = MARQUEE_LOGOS.filter(({ name }) => !broken.has(name));
+  // Duplicated so the track can translate -50% and loop seamlessly.
+  const track = [...COMPANY_LOGOS, ...COMPANY_LOGOS];
 
   return (
     <div className={styles.marqueeWrap}>
       <div className={styles.marqueeLabel}>Built by leaders from</div>
       <div className={styles.marqueeStrip} aria-label="Companies our team has worked at">
         <div className={styles.marqueeTrack} aria-hidden="true">
-          {visible.map(({ name, src }, i) => (
+          {track.map(({ name }, i) => (
             <span key={`${name}-${i}`} className={styles.marqueeItem}>
-              <img
-                src={src}
-                alt={name}
-                loading="lazy"
-                decoding="async"
-                onError={() => markBroken(name)}
-              />
+              <span className={styles.marqueeName}>{name}</span>
             </span>
           ))}
         </div>
@@ -393,9 +387,9 @@ function CapacityPill() {
 }
 
 // ─── Nav config ────────────────────────────────────────────────────────────
-const NAV_PAGES = [
-  { id: "about", label: "About Us" },
-];
+// No inner pages currently. Add entries as { id: "x", label: "X" } plus a
+// matching render branch below to bring the overlay nav back.
+const NAV_PAGES: { id: string; label: string }[] = [];
 
 // ─── Inner placeholder pages ───────────────────────────────────────────────
 function InnerPage({ title, kicker }: { title: string; kicker: string }) {
@@ -510,6 +504,7 @@ export default function Home() {
         onClick={(e) => e.target === e.currentTarget && setMenuOpen(false)}
       >
         <div className={styles.overlayInner}>
+          {NAV_PAGES.length > 0 && (
           <nav aria-label="Primary navigation" className={styles.overlayLeft}>
             <div className={styles.overlayLeftLabel}>Navigation</div>
             {NAV_PAGES.map((p) => (
@@ -521,6 +516,7 @@ export default function Home() {
               >{p.label}</button>
             ))}
           </nav>
+          )}
 
         </div>
         <div className={styles.overlayFooter}>
@@ -630,7 +626,6 @@ export default function Home() {
         </main>
       )}
 
-      {activePage === "about" && <InnerPage title="About Galadora" kicker="About" />}
     </>
   );
 }
