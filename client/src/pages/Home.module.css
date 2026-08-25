@@ -272,6 +272,22 @@ a { color: inherit; text-decoration: none; }
   );
 }
 
+/* Light grey wash over the video.
+   WHY a separate layer rather than folding it into .scrim: the scrim is a
+   vertical gradient tuned for text legibility (dark at top and bottom, clear
+   through the middle). The wash is uniform - it lifts the blacks and pulls
+   saturation out of the whole frame so the footage reads as a background
+   texture instead of competing with the headline.
+   Tune with the alpha on --hero-wash. Around .10 is barely there; .20 starts
+   to look foggy. .14 is the balance point on dark footage. */
+.scrim::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--hero-wash, rgba(206, 212, 220, .14));
+  pointer-events: none;
+}
+
 /* ── Desktop hero content (absolute positioned) ── */
 .heroContentDesktop {
   position: absolute;

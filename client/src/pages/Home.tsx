@@ -11,7 +11,7 @@ const CONTACT_ENDPOINT = import.meta.env.VITE_CONTACT_ENDPOINT as string | undef
 // gradient fallback and the video becoming playable on slow connections.
 const VIDEO_URL    = "/media/galadora-hero.mp4";
 const VIDEO_POSTER = "/media/galadora-hero-poster.jpg";
-const LOGO_WHITE = "/manus-storage/galadora_logo_white_5e60196f.png";
+const LOGO_WHITE = "/media/galadora-logo-white.png";
 
 // ─── Company logos (real hosted images) ──────────────────────────────────────
 const COMPANY_LOGOS = [

@@ -43,12 +43,22 @@ ffprobe -v error -select_streams v:0 \
 echo
 
 echo "Encoding..."
+# profile high (not main): enables CABAC and 8x8 transform, which are worth
+#   roughly 10-15% bitrate at identical quality. Supported on every device
+#   since iOS 4; "main" was leaving quality on the table for no benefit.
+# aq-mode=3: variance adaptive quantisation biased toward DARK regions. This
+#   is the specific fix for banding and blocking in gradients and shadows,
+#   which is what dark hero footage is almost entirely made of.
+# crf 26: 30 was visibly blocky on this material. Dark gradients are the
+#   hardest case for x264 and need more bitrate than a typical scene.
 ffmpeg -y -loglevel error -stats -i "$SRC" \
   -c:v libx264 \
-  -profile:v main \
+  -profile:v high \
   -pix_fmt yuv420p \
-  -crf 30 \
+  -crf 26 \
   -preset slow \
+  -tune film \
+  -x264-params "aq-mode=3:aq-strength=1.1:bframes=3" \
   -vf "scale='min(1920,iw)':-2:flags=lanczos" \
   -r 30 \
   -an \
